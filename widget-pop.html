@@ -1,0 +1,73 @@
+<!-- HTML code inside the Wix HTML widget -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Add the Tailwind CSS CDN link here -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      .glass {
+        background: hsla(0, 0%, 100%, 0.2);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        border: 1px solid hsla(0, 0%, 100%, 0.3);
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      class="glass text-[#262221] fixed uppercase w-[90%] lg:w-[800px] bottom-10 lg:bottom-5 left-0 right-0 rounded-lg border-4 border-white mx-auto"
+    >
+      <div
+        id="totalPopsContainer"
+        class="cursor-pointer animate transition-all delay-75 flex items-center justify-between text-2xl font-bold"
+      >
+        <div class="w-full p-5 flex items-center justify-between">
+          <div>Total Pops</div>
+          <div class="flex items-center justify-center gap-2">
+            <div id="totalPopsCount">0</div>
+            <!-- Pop count will be updated here -->
+            <img
+              src="https://static.wixstatic.com/media/56e255_1661ec1c29414d8185251cb09b6ff65e~mv2.png"
+              class="-mt-1 w-8 rotate-180"
+              id="arrowIcon"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // This script will receive the pop count from Wix and display it
+      function updateTotalPops(count) {
+        const totalPopsCountElement = document.getElementById("totalPopsCount");
+        totalPopsCountElement.innerText = count;
+      }
+
+      // Toggle the height of the HTML widget and the visibility of the leaderboard
+      function clickWidget() {
+        // Send a message to Wix code to resize the widget
+        window.parent.postMessage(
+          {
+            action: "clicked",
+            type: "popup-widget"
+          },
+          "*"
+        );
+      }
+
+      // Listen for a click event to toggle the height
+      document
+        .getElementById("totalPopsContainer")
+        .addEventListener("click", clickWidget);
+
+      // Listen for messages from the Wix page
+      window.addEventListener("message", (event) => {
+        if (event.data.clickCount != undefined) {
+          const clickCount = event.data.clickCount;
+          updateTotalPops(clickCount);
+        }
+      });
+    </script>
+  </body>
+</html>

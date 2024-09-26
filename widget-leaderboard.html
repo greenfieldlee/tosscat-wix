@@ -1,0 +1,120 @@
+<!-- HTML code inside the Wix HTML widget -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Add the Tailwind CSS CDN link here -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      .glass {
+        background: hsla(0, 0%, 100%, 0.2);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        border: 1px solid hsla(0, 0%, 100%, 0.3);
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      class="glass text-[#262221] fixed uppercase w-[90%] lg:w-[800px] bottom-10 lg:bottom-5 left-0 right-0 rounded-lg border-4 border-white mx-auto"
+    >
+      <div
+        class="cursor-pointer animate transition-all delay-75 flex items-center justify-between text-2xl font-bold"
+        id="header-leaderboard"
+      >
+        <div class="relative w-full">
+          <div
+            class="text-center relative text-2xl p-4 justify-center flex items-center w-full border-b-[3px] border-white/20"
+          >
+            Leaderboard<img
+              src="https://static.wixstatic.com/media/56e255_1661ec1c29414d8185251cb09b6ff65e~mv2.png"
+              class="-mt-1 w-8 absolute right-0"
+              id="arrowIcon"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="animate transition-all delay-75"
+        style="transition: height 0.6s"
+      >
+        <div class="w-full">
+          <div
+            class="p-5 text-xl font-bold border-b w-full justify-between flex items-center border-black border-opacity-10"
+          >
+            <div>Total Pops</div>
+            <div id="totalPopsCount">0</div>
+          </div>
+          <div class="h-[290px] overflow-scroll" id="countryList">
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Function to update the total number of pops
+      function updateTotalPops(count) {
+        const totalPopsCountElement = document.getElementById("totalPopsCount");
+        totalPopsCountElement.innerText = count.toLocaleString();
+      }
+
+      // Function to update the country list dynamically
+      function updateCountryList(countries) {
+        const countryListElement = document.getElementById("countryList");
+        countryListElement.innerHTML = ""; // Clear the current list
+
+        countries.forEach((country, index) => {
+          const getImage = (index) => {
+            if (index == 0) {
+              return `<img src="https://static.wixstatic.com/shapes/56e255_18c3abe2e20d4f4ca0c1d363f98a8858.svg" class="w-7" />`;
+            } else if (index == 1) {
+              return `<img src="https://static.wixstatic.com/shapes/56e255_334a6ed202624c6cba3c55fbd50bc5fe.svg" class="w-7" />`;
+            } else if (index == 2) {
+              return `<img src="https://static.wixstatic.com/shapes/56e255_b87b852f5091467293e14bf61d1e036c.svg" class="w-7" />`;
+            } else {
+              return index + 1;
+            }
+          };
+
+          const countryItem = `
+        <div class="p-3 border-b text-xl w-full justify-between flex items-center border-black border-opacity-10">
+          <div class="flex items-center gap-4">
+            <div class="flex text-2xl w-[40px] items-center justify-center">
+            ${getImage(index)}
+            </div>
+            <img src="https://flagsapi.com/${country.code}/flat/64.png" class="w-10 rounded-xl" />
+            ${country.name}
+          </div>
+          <div class="flex items-center gap-2">${country.clicks.toLocaleString()}</div>
+        </div>`;
+          countryListElement.innerHTML += countryItem;
+        });
+      }
+
+      // Listen for messages from Wix Code to update total pops and country list
+      window.addEventListener("message", function (event) {
+        if (event.data.action === "updateLeaderboard") {
+          updateTotalPops(event.data.totalPops);
+          updateCountryList(event.data.countries);
+        }
+      });
+
+      // Toggle the height of the HTML widget and the visibility of the leaderboard
+      function clickWidget() {
+        // Send a message to Wix code to resize the widget
+        window.parent.postMessage(
+          {
+            action: "clicked",
+            type: "popup-leaderboard",
+          },
+          "*"
+        );
+      }
+
+      // Listen for a click event to toggle the height
+      document
+        .getElementById("header-leaderboard")
+        .addEventListener("click", clickWidget);
+    </script>
+  </body>
+</html>
