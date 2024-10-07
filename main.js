@@ -1,6 +1,20 @@
 import wixData from 'wix-data';
 import {fetch} from 'wix-fetch'; // To use fetch in Wix
 
+// Function to fetch the user's country
+function getUserCountry() {
+    return fetch('https://ipinfo.io/json', { method: 'get' })
+        .then(response => response.json())
+        .then(data => {
+            $w("#countryFlag").src = `https://flagsapi.com/${data.country}/flat/64.png`;
+            return data.country; // Returns the country code, e.g., 'US', 'IN', 'GB'
+        })
+        .catch(error => {
+            console.error('Error fetching country:', error);
+            return 'Unknown'; // Fallback if something goes wrong
+        });
+}
+
 $w.onReady(function () {
     $w("#container1").hide();
     $w("#container2").hide();
@@ -12,17 +26,27 @@ $w.onReady(function () {
     $w("#audioPlayer4").hide();
     $w("#popup-leaderboard").hide();
     $w("#popup-widget").show();
+    $w("#cat-img-open").hide(); // Initially hide the open mouth cat image
 
     // Fetch the user's country
     getUserCountry().then(countryCode => {
         // Add click event to the image
-        $w('#cat-img').onClick(() => {
+        $w('#cat-img-close').onClick(() => {
+            // Show the open mouth cat image
+            $w("#cat-img-close").hide();
+            $w("#cat-img-open").show();
+
+            // Perform the animation and increment logic
             showAnimation();
             incrementClickCount(countryCode); // Pass the country code when incrementing
+
+            // After a short delay, revert back to the closed mouth cat image
+            setTimeout(() => {
+                $w("#cat-img-open").hide();
+                $w("#cat-img-close").show();
+            }, 200); // Adjust the delay as needed
         });
 
-        // Load the initial click count for that country
-        // loadClickCount(countryCode);
         // Start fetching and updating the leaderboard data every second
         setInterval(() => {
             loadLeaderboardData();
@@ -35,8 +59,6 @@ $w.onReady(function () {
     $w("#popup-widget").onMessage((event) => {
         if (event.data.action === 'clicked') {
             let widgetType = event.data.type;
-
-            // Dynamically adjust the height of the HTML widget
 
             if(widgetType == "popup-widget") {
                 $w("#popup-widget").hide();
@@ -53,8 +75,6 @@ $w.onReady(function () {
         if (event.data.action === 'clicked') {
             let widgetType = event.data.type;
 
-            // Dynamically adjust the height of the HTML widget
-
             if(widgetType == "popup-widget") {
                 $w("#popup-widget").hide();
                 $w("#popup-leaderboard").show();
@@ -66,13 +86,13 @@ $w.onReady(function () {
     });
 });
 
-
 // Array of animation objects
 const animations = [
     { src: "https://static.wixstatic.com/media/56e255_f38c7fcb81a64334b1443b611fd7a748~mv2.gif", duration: 3000 },
     { src: "https://static.wixstatic.com/media/56e255_653afdf667444fa8b6389603704a0f9c~mv2.gif", duration: 2700 },
     { src: "https://static.wixstatic.com/media/56e255_8369548e5f1f45289ea0cf6c389261b6~mv2.gif", duration: 2700 },
-    { src: "https://static.wixstatic.com/media/56e255_1c51e416eee9440e9144351ce62d826d~mv2.gif", duration: 2700 },
+    // { src: "https://static.wixstatic.com/media/56e255_1c51e416eee9440e9144351ce62d826d~mv2.gif", duration: 2700 },
+    { src: "https://static.wixstatic.com/media/56e255_9e7686bf5ac04c38863a2c4292131541~mv2.gif", duration: 2700 },
     // Add more animations as needed
 ];
 
@@ -152,7 +172,6 @@ function incrementClickCount(countryCode) {
         });
 }
 
-
 function loadClickCount(countryCode) {
     wixData.query("ClickCounts")
         .eq("countryCode", countryCode) // Filter by country code
@@ -164,7 +183,6 @@ function loadClickCount(countryCode) {
                 // Update the total clicks in the HTML widget
                 sendClickCountToWidget(item.clickCount);
             } else {
-
                 // Update the total clicks in the HTML widget
                 sendClickCountToWidget(0);
             }
@@ -173,7 +191,6 @@ function loadClickCount(countryCode) {
             console.error("Error loading click count:", error);
         });
 }
-
 
 function playMusic(currentAnimationIndex) {
     const audioElement = $w(`#audioPlayer${currentAnimationIndex + 1}`); // Replace with the ID of your audio player
@@ -192,19 +209,6 @@ function playMusic(currentAnimationIndex) {
         })
         .catch((error) => {
             console.error("Error playing music:", error);
-        });
-}
-
-function getUserCountry() {
-    return fetch('https://ipinfo.io/json', { method: 'get' })
-        .then(response => response.json())
-        .then(data => {
-            $w("#countryFlag").src= `https://flagsapi.com/${data.country}/flat/64.png`;
-            return data.country; // Returns the country code, e.g., 'US', 'IN', 'GB'
-        })
-        .catch(error => {
-            console.error('Error fetching country:', error);
-            return 'Unknown'; // Fallback if something goes wrong
         });
 }
 
@@ -261,3 +265,4 @@ function getCountryNameFromCode(code) {
     };
     return countryNames[code] || code;
 }
+
