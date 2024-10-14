@@ -43,6 +43,8 @@ $w.onReady(function () {
                 // Perform the animation and increment logic
                 showAnimation();
                 incrementClickCount(countryCode); // Pass the country code when incrementing
+
+                vibrateClickCountText();
     
                 // After a short delay, revert back to the closed mouth cat image
                 setTimeout(() => {
@@ -275,3 +277,37 @@ function getCountryNameFromCode(code) {
     return countryNames[code] || code;
 }
 
+function vibrateClickCountText() {
+    const textElement = $w("#clickCountText");
+
+    // Define vibration parameters
+    const vibrations = 6; // Number of vibrations
+    const distance = 3; // Distance to move (in pixels)
+    const duration = 30; // Duration of one vibration (in milliseconds)
+
+    // Create a timeline for the vibration effect
+    const timeline = wixAnimations.timeline();
+
+    for (let i = 0; i < vibrations; i++) {
+        // Move right
+        timeline.add(textElement, {
+            x: distance,
+            duration: duration
+        });
+
+        // Move left
+        timeline.add(textElement, {
+            x: -distance,
+            duration: duration
+        });
+    }
+
+    // Reset position after vibrations
+    timeline.add(textElement, {
+        x: 0,
+        duration: duration
+    });
+
+    // Play the timeline
+    timeline.play();
+}
