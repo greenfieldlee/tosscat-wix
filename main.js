@@ -49,7 +49,7 @@ $w.onReady(function () {
                     $w("#cat-img-open").hide();
                     $w("#cat-img-close").show();
                     readyToClick = 1;
-                }, 500); // Adjust the delay as needed
+                }, 150); // Adjust the delay as needed
             }
         });
 
@@ -94,14 +94,14 @@ $w.onReady(function () {
 
 // Array of animation objects
 const animations = [
-    { src: "https://static.wixstatic.com/media/56e255_c8e5b6da25ae4c03a8196f3fbd1f620f~mv2.gif", duration: 4000 },
-    { src: "https://static.wixstatic.com/media/56e255_1bd8e4ca56cc4cc78084273c16675f8c~mv2.gif", duration: 3700 },
-    { src: "https://static.wixstatic.com/media/56e255_95fbd5fbc58f44d48e3f6d0d6ebc03b1~mv2.gif", duration: 3700 },
-    { src: "https://static.wixstatic.com/media/56e255_882222e33395436992f4d6d8c6e29c15~mv2.gif", duration: 3700 },
-    { src: "https://static.wixstatic.com/media/56e255_0478677302c7415eb157eacf7d078855~mv2.gif", duration: 3000 },
-    { src: "https://static.wixstatic.com/media/56e255_4685038cc5754a029f76b6dd31951ced~mv2.gif", duration: 2700 },
-    { src: "https://static.wixstatic.com/media/56e255_ef01692653694301877e890c741d626e~mv2.gif", duration: 2700 },
-    { src: "https://static.wixstatic.com/media/56e255_6212768520bc407f9bba8ecbfaf26d9f~mv2.gif", duration: 2700 },
+    { src: "https://static.wixstatic.com/media/56e255_30c7079ba9c5474fa3215cc0d86d304d~mv2.gif", duration: 1200 },
+    { src: "https://static.wixstatic.com/media/56e255_096308cbb1e246678f2fbcd0f442a57d~mv2.gif", duration: 1300 },
+    { src: "https://static.wixstatic.com/media/56e255_5c9aa274ca5e4c4cac631a4710dffd7e~mv2.gif", duration: 1500 },
+    { src: "https://static.wixstatic.com/media/56e255_80d256c2448e49ca9bf49f39cb940a83~mv2.gif", duration: 1200 },
+    { src: "https://static.wixstatic.com/media/56e255_cda331ee66d34fe39c0e2a72e5645f21~mv2.gif", duration: 1200 },
+    { src: "https://static.wixstatic.com/media/56e255_cda331ee66d34fe39c0e2a72e5645f21~mv2.gif", duration: 1300 },
+    { src: "https://static.wixstatic.com/media/56e255_5c6d74e1e8a04d0a8efe9dcc36b2aaf9~mv2.gif", duration: 1500 },
+    { src: "https://static.wixstatic.com/media/56e255_6c3adffd26174780839b686bef620f42~mv2.gif", duration: 1200 },
     // Add more animations as needed
 ];
 
