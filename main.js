@@ -15,6 +15,8 @@ function getUserCountry() {
         });
 }
 
+let readyToClick = 1;
+
 $w.onReady(function () {
     $w("#container1").hide();
     $w("#container2").hide();
@@ -32,19 +34,23 @@ $w.onReady(function () {
     getUserCountry().then(countryCode => {
         // Add click event to the image
         $w('#cat-img-close').onClick(() => {
-            // Show the open mouth cat image
-            $w("#cat-img-close").hide();
-            $w("#cat-img-open").show();
-
-            // Perform the animation and increment logic
-            showAnimation();
-            incrementClickCount(countryCode); // Pass the country code when incrementing
-
-            // After a short delay, revert back to the closed mouth cat image
-            setTimeout(() => {
-                $w("#cat-img-open").hide();
-                $w("#cat-img-close").show();
-            }, 200); // Adjust the delay as needed
+            if(readyToClick == 1) {
+                readyToClick = 0;
+                // Show the open mouth cat image
+                $w("#cat-img-close").hide();
+                $w("#cat-img-open").show();
+    
+                // Perform the animation and increment logic
+                showAnimation();
+                incrementClickCount(countryCode); // Pass the country code when incrementing
+    
+                // After a short delay, revert back to the closed mouth cat image
+                setTimeout(() => {
+                    $w("#cat-img-open").hide();
+                    $w("#cat-img-close").show();
+                    readyToClick = 1;
+                }, 500); // Adjust the delay as needed
+            }
         });
 
         // Start fetching and updating the leaderboard data every second
@@ -88,11 +94,14 @@ $w.onReady(function () {
 
 // Array of animation objects
 const animations = [
-    { src: "https://static.wixstatic.com/media/56e255_f38c7fcb81a64334b1443b611fd7a748~mv2.gif", duration: 3000 },
-    { src: "https://static.wixstatic.com/media/56e255_653afdf667444fa8b6389603704a0f9c~mv2.gif", duration: 2700 },
-    { src: "https://static.wixstatic.com/media/56e255_8369548e5f1f45289ea0cf6c389261b6~mv2.gif", duration: 2700 },
-    // { src: "https://static.wixstatic.com/media/56e255_1c51e416eee9440e9144351ce62d826d~mv2.gif", duration: 2700 },
-    { src: "https://static.wixstatic.com/media/56e255_9e7686bf5ac04c38863a2c4292131541~mv2.gif", duration: 2700 },
+    { src: "https://static.wixstatic.com/media/56e255_c8e5b6da25ae4c03a8196f3fbd1f620f~mv2.gif", duration: 4000 },
+    { src: "https://static.wixstatic.com/media/56e255_1bd8e4ca56cc4cc78084273c16675f8c~mv2.gif", duration: 3700 },
+    { src: "https://static.wixstatic.com/media/56e255_95fbd5fbc58f44d48e3f6d0d6ebc03b1~mv2.gif", duration: 3700 },
+    { src: "https://static.wixstatic.com/media/56e255_882222e33395436992f4d6d8c6e29c15~mv2.gif", duration: 3700 },
+    { src: "https://static.wixstatic.com/media/56e255_0478677302c7415eb157eacf7d078855~mv2.gif", duration: 3000 },
+    { src: "https://static.wixstatic.com/media/56e255_4685038cc5754a029f76b6dd31951ced~mv2.gif", duration: 2700 },
+    { src: "https://static.wixstatic.com/media/56e255_ef01692653694301877e890c741d626e~mv2.gif", duration: 2700 },
+    { src: "https://static.wixstatic.com/media/56e255_6212768520bc407f9bba8ecbfaf26d9f~mv2.gif", duration: 2700 },
     // Add more animations as needed
 ];
 
@@ -111,7 +120,7 @@ function showAnimation() {
     // Show the container element
     containerElement.show();
 
-    playMusic(currentAnimationIndex);
+    playMusic(currentAnimationIndex % 4);
 
     clickedNumber = clickedNumber + 1;
 
